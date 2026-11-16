@@ -61,6 +61,14 @@ async function actualizar() {
   tabla(document.querySelector('#bajas'), productos.filter(p => p.cantidad < p.minimo), false, 'No hay productos por debajo del mínimo.');
 }
 
+function limpiarExito() {
+  estado.textContent = '';
+}
+
+form.addEventListener('input', limpiarExito);
+form.addEventListener('focusin', limpiarExito);
+form.addEventListener('invalid', limpiarExito, true);
+
 form.addEventListener('submit', async event => {
   event.preventDefault(); error.textContent = ''; estado.textContent = ''; guardar.disabled = true;
   try {
