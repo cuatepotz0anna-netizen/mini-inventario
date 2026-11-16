@@ -34,9 +34,9 @@ Lo aprobé porque permitió conservar los cambios y moverlos a la rama correcta 
 
 ## 6. Revisión de contexto
 
-- Antes de compactar: 95% disponible, 35.5K usados de 475K.
-- Después se usó `/compact`.
-- Se revisó solo `public/productos.js` contra `docs/diseno.md`.
+- Antes de `/compact`: 95% disponible, 35.5K usados de 475K.
+- Después de `/compact`: 96% disponible, 28.4K usados de 475K.
+- Después de compactar, la revisión se hizo más acotada: se revisó únicamente `public/productos.js` contra `docs/diseno.md`.
 
 ## 7. Estado de la entrega
 
