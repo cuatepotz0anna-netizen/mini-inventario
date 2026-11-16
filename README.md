@@ -6,3 +6,7 @@ Proyecto web de inventario.
 
 - Node.js 22
 - Python 3.12
+
+## Requisitos funcionales
+
+Las cinco historias de usuario y sus criterios de aceptación están en [docs/requisitos.md](docs/requisitos.md).
