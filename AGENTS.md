@@ -10,3 +10,4 @@
 - Pide aprobación antes de desplegar cambios.
 - Revisa los comandos antes de ejecutarlos.
 - Mantén el README actualizado cuando cambien los requisitos.
+- No hagas merge automaticamente; solicita aprobacion antes.
