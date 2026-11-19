@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini Inventario</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="/supabase.js"></script>
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <main>
+    <header><p class="eyebrow">CONTROL DE EXISTENCIAS</p><h1>Mini Inventario</h1>
+      <p>Tus productos y lo que necesitas reponer, en un solo lugar.</p>
+    </header>
+    <section class="card" aria-labelledby="auth-title">
+      <h2 id="auth-title">Acceso a tu inventario</h2>
+      <form id="auth-form">
+        <label>Correo electrónico<input name="email" type="email" autocomplete="email" required></label>
+        <label>Contraseña<input name="password" type="password" autocomplete="current-password" required></label>
+        <div class="actions">
+          <button type="submit" value="login" disabled>Iniciar sesión</button>
+          <button type="submit" value="signup" class="secondary" disabled>Crear cuenta</button>
+        </div>
+      </form>
+      <button type="button" id="cerrar-sesion" class="secondary" hidden>Cerrar sesión</button>
+      <p id="auth-error" role="alert"></p>
+      <p id="auth-estado" role="status"></p>
+    </section>
+    <div id="inventario-privado" hidden>
+    <section aria-labelledby="form-title" class="card">
+      <h2 id="form-title">Agregar producto</h2>
+      <form id="producto-form">
+        <label>Nombre<input name="nombre" required maxlength="200"></label>
+        <label>SKU<input name="sku" required maxlength="100"></label>
+        <label>Cantidad<input name="cantidad" type="number" min="0" step="1" required></label>
+        <label>Cantidad mínima<input name="minimo" type="number" min="0" step="1" required></label>
+        <div class="actions"><button type="submit" id="guardar">Guardar producto</button>
+          <button type="button" id="cancelar" class="secondary" hidden>Cancelar edición</button></div>
+      </form>
+      <p id="error" role="alert"></p><p id="estado" role="status"></p>
+    </section>
+    <section class="card" aria-labelledby="inventario-title"><h2 id="inventario-title">Inventario</h2>
+      <div id="inventario"></div></section>
+    <section class="card" aria-labelledby="bajas-title"><h2 id="bajas-title">Existencias bajas</h2>
+      <p>Productos con cantidad menor que su mínimo.</p><div id="bajas"></div></section>
+    </div>
+  </main>
+</body>
+</html>
