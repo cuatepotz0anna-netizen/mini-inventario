@@ -1,0 +1,47 @@
+Falla provocada: filtro de existencias bajas cambiado temporalmente de < a >.
+Comando: npm run test:e2e
+Código de salida: 1
+
+> mini-inventario@1.0.0 test:e2e
+> playwright test
+
+
+Running 4 tests using 1 worker
+
+  ok 1 tests\inventario.spec.js:55:1 › inicia sesión correctamente (1.9s)
+  ok 2 tests\inventario.spec.js:61:1 › rechaza una contraseña incorrecta (1.2s)
+  ok 3 tests\inventario.spec.js:73:3 › productos › agrega un producto (3.0s)
+  x  4 tests\inventario.spec.js:81:3 › productos › marca existencias bajas cuando la cantidad es menor al mínimo (7.6s)
+
+
+  1) tests\inventario.spec.js:81:3 › productos › marca existencias bajas cuando la cantidad es menor al mínimo
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('#bajas').getByRole('row').filter({ has: getByRole('cell', { name: 'E2E-78e31450-c189-4e2f-9931-51c2312060fb', exact: true }) })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" locator('#bajas').getByRole('row').filter({ has: getByRole('cell', { name: 'E2E-78e31450-c189-4e2f-9931-51c2312060fb', exact: true }) }) with timeout 5000ms
+      - waiting for locator('#bajas').getByRole('row').filter({ has: getByRole('cell', { name: 'E2E-78e31450-c189-4e2f-9931-51c2312060fb', exact: true }) })
+
+
+      83 |     const row = productRow(page.locator('#inventario'), sku);
+      84 |     await expect(row.getByRole('cell', { name: 'Existencias bajas' })).toBeVisible();
+    > 85 |     await expect(productRow(page.locator('#bajas'), sku)).toBeVisible();
+         |                                                           ^
+      86 |   });
+      87 | });
+      88 |
+        at C:\Users\ACC\Documents\mini-inventario\tests\inventario.spec.js:85:59
+
+    Error Context: test-results\inventario-productos-marca-23855-cantidad-es-menor-al-mínimo\error-context.md
+
+  1 failed
+    tests\inventario.spec.js:81:3 › productos › marca existencias bajas cuando la cantidad es menor al mínimo
+  3 passed (18.5s)
+
+(node:26980) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
