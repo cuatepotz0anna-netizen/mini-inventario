@@ -26,7 +26,32 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Ejecutar pruebas de Playwright
-        run: npm run test:e2e -- --reporter=html
+        run: |
+          node --input-type=module <<'NODE'
+          import { once } from 'node:events';
+          import { app } from './server.js';
+
+          const url = process.env.SUPABASE_URL?.trim() ?? '';
+          const key = process.env.SUPABASE_KEY?.trim() ?? '';
+          console.log(`SUPABASE_URL existe: ${Boolean(url)}`);
+          console.log(`SUPABASE_KEY existe: ${Boolean(key)}`);
+          console.log(`SUPABASE_URL empieza con https://: ${url.startsWith('https://')}`);
+          console.log(`SUPABASE_KEY tiene formato sb_publishable_: ${/^sb_publishable_[A-Za-z0-9_-]+$/.test(key)}`);
+
+          const server = app.listen(0, '127.0.0.1');
+          await once(server, 'listening');
+          try {
+            const origin = `http://127.0.0.1:${server.address().port}`;
+            for (const path of ['/health', '/config.js', '/supabase.js']) {
+              const response = await fetch(`${origin}${path}`);
+              console.log(`${path}: ${response.status}`);
+              await response.body?.cancel();
+            }
+          } finally {
+            server.close();
+          }
+          NODE
+          npm run test:e2e -- --reporter=html
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
