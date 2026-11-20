@@ -43,7 +43,7 @@ function tabla(destino, productos, editable, vacio) {
   const body = table.createTBody();
   for (const producto of productos) {
     const row = body.insertRow();
-    const baja = producto.cantidad <= producto.minimo;
+    const baja = producto.cantidad < producto.minimo;
     for (const valor of [producto.nombre, producto.sku, producto.cantidad, producto.minimo, baja ? 'Existencias bajas' : 'En nivel']) {
       row.insertCell().textContent = valor;
     }
