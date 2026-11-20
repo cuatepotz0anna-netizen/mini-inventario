@@ -26,6 +26,12 @@ Si las pruebas necesitan una configuración pública de Supabase distinta de la 
 
 Ejecuta `npx playwright install chromium --no-shell` una vez y después `npm run test:e2e`. Playwright arranca la app en el puerto 3100 y comprueba el acceso y el inventario en Chromium. Las pruebas de inventario crean productos con SKU únicos y los eliminan al finalizar.
 
+## Integración continua
+
+GitHub Actions ejecuta las pruebas de Playwright en Ubuntu con Node.js 22 en cada pull request hacia `main`. Configura `SUPABASE_URL`, `SUPABASE_KEY`, `TEST_EMAIL` y `TEST_PASSWORD` como secretos de Actions en el repositorio. Usa una llave **publishable** o **anon** y una cuenta de prueba confirmada.
+
+El reporte HTML queda disponible como artefacto `playwright-report` cuando Playwright lo genera, incluso si fallan las pruebas. Los pull requests desde forks normalmente carecen de acceso a los secretos y las pruebas que dependen de ellos fallarán.
+
 ## Requisitos funcionales
 
 Las cinco historias de usuario y sus criterios de aceptación están en [docs/requisitos.md](docs/requisitos.md).
