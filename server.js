@@ -1,7 +1,6 @@
 import express from 'express';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
-import { loadEnvFile } from 'node:process';
 
 export const app = express();
 app.get('/health', (_req, res) => res.json({ status: 'ok' }));
@@ -35,7 +34,7 @@ function esLlavePublica(key) {
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) {
   try {
-    loadEnvFile(fileURLToPath(new URL('./.env', import.meta.url)));
+    process.loadEnvFile('.env');
   } catch (error) {
     if (error.code !== 'ENOENT') throw error;
   }
