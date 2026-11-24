@@ -1,0 +1,12 @@
+**
+!package.json
+!package-lock.json
+!server.js
+!public/
+!public/**
+**/.env
+**/.env.*
+**/node_modules
+**/test
+**/tests
+**/entregas
