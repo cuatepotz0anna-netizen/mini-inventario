@@ -5,6 +5,18 @@ import { loadEnvFile } from 'node:process';
 
 export const app = express();
 app.get('/health', (_req, res) => res.json({ status: 'ok' }));
+app.get('/config-check', (_req, res) => {
+  const url = process.env.SUPABASE_URL?.trim();
+  const key = process.env.SUPABASE_KEY?.trim();
+  const parsedUrl = URL.parse(url ?? '');
+  res.set('Cache-Control', 'no-store').json({
+    urlExiste: Boolean(url),
+    urlHttps: parsedUrl?.protocol === 'https:',
+    urlHost: parsedUrl?.hostname || null,
+    keyExiste: Boolean(key),
+    keyPublishable: esLlavePublica(key),
+  });
+});
 app.get('/config.js', (_req, res) => {
   const url = process.env.SUPABASE_URL?.trim();
   const key = process.env.SUPABASE_KEY?.trim();
