@@ -46,6 +46,17 @@ Se aprobó el comando de merge del PR #18 después de que `gh pr checks 18` most
 - El MCP de Render diagnosticó la falla intencional a partir de los logs de compilación.
 - Tras la reparación, Render volvió a **Live** y se comprobó que la URL pública funcionaba.
 
+## Evidencias
+
+### Docker local
+![Docker local](evidencias/01-docker-local.jpg)
+
+### Render y despliegue
+![Render](evidencias/02-render.jpg)
+
+### Verificación final
+![Verificación final](evidencias/03-verificacion-final.jpg)
+
 ## Prompts clave
 
 - Crear el `Dockerfile` y el `.dockerignore` para ejecutar Mini Inventario en Docker.
