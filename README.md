@@ -35,3 +35,11 @@ El reporte HTML queda disponible como artefacto `playwright-report` cuando Playw
 ## Requisitos funcionales
 
 Las cinco historias de usuario y sus criterios de aceptación están en [docs/requisitos.md](docs/requisitos.md).
+
+## Servidor MCP de inventario
+
+Instala las dependencias en un entorno virtual de Python 3.12 con `python -m pip install fastmcp "psycopg[binary]" python-dotenv`.
+Define `DATABASE_URL` en el archivo local `mcp-inventario/.env` con un rol de PostgreSQL de solo lectura que tenga acceso a los productos que quieras consultar.
+
+El servidor se ejecuta con `python mcp-inventario/server.py` y usa el transporte stdio.
+Ofrece `buscar_producto(nombre)` para buscar por nombre y `stock_bajo()` para listar existencias por debajo del mínimo. Cada consulta devuelve hasta 50 productos.
