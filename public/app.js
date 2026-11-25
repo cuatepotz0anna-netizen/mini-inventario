@@ -15,6 +15,7 @@ const bajas = document.querySelector('#bajas');
 let editando = null;
 let repositorio;
 let userId = null;
+let productosCargados = [];
 let versionSesion = 0;
 let versionListado = 0;
 
@@ -77,6 +78,7 @@ async function actualizar(sesion = versionSesion) {
   const listado = ++versionListado;
   const productos = await repositorio.listarProductos();
   if (sesion !== versionSesion || listado !== versionListado) return;
+  productosCargados = productos;
   tabla(inventario, productos, true, 'Todavía no tienes productos. Agrega el primero con el formulario.');
   tabla(bajas, productos.filter(p => p.cantidad < p.minimo), false, 'No hay productos por debajo del mínimo.');
 }
@@ -116,7 +118,14 @@ form.addEventListener('submit', async event => {
   estado.textContent = '';
   guardar.disabled = true;
   try {
-    await repositorio.guardarProducto(Object.fromEntries(new FormData(form)), editando, userId);
+    const datos = Object.fromEntries(new FormData(form));
+    const skuNormalizado = datos.sku.trim().toLowerCase();
+    if (editando === null && productosCargados.some(producto =>
+      producto.user_id === userId && producto.sku.trim().toLowerCase() === skuNormalizado
+    )) {
+      throw new Error('Ya existe un producto con ese SKU.');
+    }
+    await repositorio.guardarProducto(datos, editando, userId);
     if (sesion !== versionSesion) return;
     terminarEdicion();
     await actualizar(sesion);
@@ -133,6 +142,7 @@ function mostrarSesion(session) {
   const siguiente = session?.user.id ?? null;
   if (siguiente === userId) return;
   userId = siguiente;
+  productosCargados = [];
   const sesion = ++versionSesion;
   privado.hidden = !userId;
   authForm.hidden = Boolean(userId);

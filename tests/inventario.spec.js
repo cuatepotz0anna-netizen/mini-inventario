@@ -64,6 +64,59 @@ test('rechaza una contraseña incorrecta', async ({ page }) => {
   await expect(page.locator('#inventario-privado')).toBeHidden();
 });
 
+test('bloquea un SKU duplicado normalizado antes de escribir en Supabase', async ({ page }) => {
+  const user = { id: randomUUID(), email: 'regresion@example.test' };
+  const producto = {
+    id: randomUUID(),
+    user_id: user.id,
+    nombre: 'Producto existente',
+    sku: 'SKU-DIA-10',
+    cantidad: 2,
+    minimo: 1,
+  };
+  const escrituras = [];
+
+  await page.route('**/config.js', route => route.fulfill({
+    contentType: 'application/javascript',
+    body: "export const config = { url: location.origin, key: 'clave-de-prueba' };",
+  }));
+  await page.addInitScript(user => {
+    const proyecto = location.hostname.split('.')[0];
+    localStorage.setItem(`sb-${proyecto}-auth-token`, JSON.stringify({
+      access_token: 'token-de-prueba',
+      refresh_token: 'renovacion-de-prueba',
+      expires_at: Math.floor(Date.now() / 1000) + 3600,
+      user,
+    }));
+  }, user);
+  await page.route('**/rest/v1/productos?*', async route => {
+    const request = route.request();
+    if (request.method() === 'GET') {
+      await route.fulfill({ json: [producto] });
+      return;
+    }
+
+    escrituras.push(request.method());
+    await route.fulfill({
+      status: 409,
+      json: { code: '23505', message: 'duplicate key value violates unique constraint' },
+    });
+  });
+
+  await page.goto('/');
+  await expect(productRow(page.locator('#inventario'), producto.sku)).toBeVisible();
+
+  const form = page.locator('#producto-form');
+  await form.getByLabel('Nombre').fill('Segundo producto');
+  await form.getByLabel('SKU').fill(`  ${producto.sku.toLowerCase()}  `);
+  await form.locator('[name=cantidad]').fill('2');
+  await form.locator('[name=minimo]').fill('1');
+  await form.getByRole('button', { name: 'Guardar producto' }).click();
+
+  await expect(page.locator('#error')).toHaveText('Ya existe un producto con ese SKU.');
+  expect(escrituras, 'La web debe rechazar el duplicado antes de enviar la escritura').toEqual([]);
+});
+
 test.describe('productos', () => {
   test.beforeEach(async ({ page }) => {
     await iniciarSesion(page);
