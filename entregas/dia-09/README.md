@@ -45,3 +45,19 @@ Se aprobó el comando de merge del PR #18 después de que `gh pr checks 18` most
 - Render mostró **Deploy succeeded** y el servicio quedó **Live**.
 - El MCP de Render diagnosticó la falla intencional a partir de los logs de compilación.
 - Tras la reparación, Render volvió a **Live** y se comprobó que la URL pública funcionaba.
+
+## Prompts clave
+
+- Crear el `Dockerfile` y el `.dockerignore` para ejecutar Mini Inventario en Docker.
+- Usar el MCP de Render para consultar el despliegue fallido y sus logs, e identificar la causa exacta y la línea que la provocó.
+- Reparar el `Dockerfile` quitando únicamente la línea temporal `RUN npm run no-existe`.
+- Verificar que la URL pública responda, que la página de Mini Inventario cargue y que no muestre el error de configuración de Supabase.
+
+## Verificación final con el agente
+
+- La URL pública <https://mini-inventario-u821.onrender.com> respondió con **HTTP 200**.
+- El HTML mostró **Mini Inventario** en el título y el encabezado.
+- `config.js`, `supabase.js` y `app.js` respondieron con **HTTP 200**.
+- El mensaje de error de configuración de Supabase no apareció en el HTML recibido.
+- La comprobación fue de solo lectura.
+- El agente no pudo verificar la ejecución de JavaScript porque el navegador de verificación no estaba disponible.
